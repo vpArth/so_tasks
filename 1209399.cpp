@@ -1,6 +1,9 @@
 #include <iostream>
+#include <tuple>
 
-void solve()
+#define CALC 0
+
+void solve(bool (*check)(int, int, int, int, int))
 {
   using std::cout;
   for (int a = 1; a < 10; a++)
@@ -10,28 +13,24 @@ void solve()
     int d = (b * g) % 10;         if (d == a || d == b || d == g) continue;
     int v = (100 + d*g - b) % 10; if (v == a || v == b || v == g || v == d) continue;
 
-    int ab  =  10 * a + b;
-    int vg  =  10 * v + g;
-    int ddd = 111 * d;
-    int vv  =  11 * v;
-    if (ab * vg == ddd && d * vg - ab == vv) {
-
-      cout << a << ", " << b << ", " << v << ", " << g << ", " << d << "\n";
-
-      cout << ab << " * " << vg << " = " << ddd << "\n";
-      cout <<  d << " * " << vg << " - " <<  ab << " = " << vv << "\n";
-
-      cout << ab * g << "\n";
+    if (check(a, b, v, g, d)) {
+      cout << (10*a+b) * g << "\n";
     }
   }
 }
 
 int main()
 {
-  // solve();
-  std::cout << "3, 7, 1, 2, 4\n"
-               "37 * 12 = 444\n"
-               "4 * 12 - 37 = 11\n"
-               "74\n";
-  return 0;
+#ifdef CALC
+  solve([](int a, int b, int v, int g, int d) -> bool {
+    int ab  =  10 * a + b;
+    int vg  =  10 * v + g;
+    int ddd = 111 * d;
+    int vv  =  11 * v;
+
+    return (ab * vg == ddd) && (d * vg - ab == vv);
+  });
+#else
+  std::cout << "74\n";
+#endif
 }
