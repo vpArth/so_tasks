@@ -51,12 +51,16 @@ int main()
 {
 #ifdef CALC
   const int no_solution = -1;
-  solve<5>([](const std::array<int, 5> args) -> int {
+  solve<3>([](const std::array<int, 3> args) -> int {
     int a = args[0];
     int b = args[1];
-    int v = args[2];
-    int g = args[3];
-    int d = args[4];
+    int g = args[2];
+
+    int d = (b * g) % 10;
+    if (d == a || d == b || d == g) return no_solution;
+
+    int v = (10 + d*g - b) % 10;
+    if (v == a || v == b || v == g || v == d) return no_solution;
 
     int ab  =  10 * a + b;
     int vg  =  10 * v + g;
