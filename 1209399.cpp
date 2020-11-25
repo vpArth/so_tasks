@@ -4,6 +4,10 @@
 
 #define CALC
 
+/**
+ * Mutate «current» into next combination
+ * Returns false if provided current state is a last combination
+ */
 template <int N, int K>
 bool next_combination(std::array<int, K> &current, int min = 1) {
   auto head = current.begin();
@@ -22,8 +26,12 @@ bool next_combination(std::array<int, K> &current, int min = 1) {
   return true;
 }
 
+
+/**
+ * Traverses all (9, N) permutations and prints all solution, if found
+ */
 template <int N>
-void solve(int (*get_solution)(const std::array<int, N>))
+void solve(int (*get_solution)(const std::array<int, N>), int no_solution)
 {
   std::array<int, N> digits;
   // Set initial combination: 1, 2, 3, ..., N
@@ -32,7 +40,7 @@ void solve(int (*get_solution)(const std::array<int, N>))
     std::array<int, N> vars(digits);
     do {
       int solution = get_solution(vars);
-      if (solution != -1) {
+      if (solution != no_solution) {
         std::cout << solution << "\n";
       }
     } while (std::next_permutation(vars.begin(), vars.end()));
@@ -42,6 +50,7 @@ void solve(int (*get_solution)(const std::array<int, N>))
 int main()
 {
 #ifdef CALC
+  const int no_solution = -1;
   solve<5>([](const std::array<int, 5> args) -> int {
     int a = args[0];
     int b = args[1];
@@ -54,8 +63,8 @@ int main()
     int ddd = 111 * d;
     int vv  =  11 * v;
 
-    return (ab * vg == ddd) && (d * vg - ab == vv) ? ab*g : -1;
-  });
+    return (ab * vg == ddd) && (d * vg - ab == vv) ? ab*g : no_solution;
+  }, no_solution);
 #else
   std::cout << "74\n";
 #endif
