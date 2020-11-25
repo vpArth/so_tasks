@@ -18,11 +18,12 @@ unsigned solve(unsigned n) {
 
 template <std::unsigned_integral T>
 T tsolve(const T& n, bool full_width = true) {
-    if (n == -1u || n == 0) {
+    T full_bits = ~T{0};
+    if (n == full_bits || n == 0) {
         return n;
     }
 
-    T t (~T{});
+    T t = full_bits;
     T shift = (T)(sizeof(T)*8 - std::popcount(n));
 
     if (full_width) {
@@ -51,5 +52,8 @@ int main() {
     std::cout << tsolve(uint16_t(1033)) << std::endl;          // e000
 
     std::cout << tsolve(uint32_t(1033), false) << std::endl;   // 700
+
+    std::cout << (int)tsolve(uint8_t(11), false) << std::endl;   // e
+    std::cout << (int)tsolve(uint8_t(11), true) << std::endl;   // e0
 }
 
